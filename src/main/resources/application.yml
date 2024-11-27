@@ -1,0 +1,19 @@
+server.port: 8001
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:6033/jwtappdemodb?serverTimezone=UTC
+    driver-class-name: com.mysql.jdbc.Driver
+    username: username
+    password: root
+
+  liquibase:
+    change-log: classpath:liquibase/db.changelog-master.xml
+    url: jdbc:mysql://localhost:6033/jwtappdemodb?serverTimezone=UTC
+    user: username
+    password: root
+
+
+jwt.token:
+  secret: jwtappdemo
+  expired: 3600000

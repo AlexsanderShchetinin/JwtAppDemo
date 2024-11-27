@@ -1,0 +1,41 @@
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    ports:
+      - "6033:3306"
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: jwtappdemodb
+      MYSQL_USER: username
+      MYSQL_PASSWORD: root
+    healthcheck:
+      test: pg_isready -q -d $$MYSQL_DATABASE -U $$MYSQL_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
+
+  Liquibase:
+    # Image to be pulled from Docker Hub
+    image: liquibase/liquibase:4.9.1
+    # Name of the container
+    container_name: liquibase_container
+    # Setting depends_on to PostgreSQL container to wait till the service is ready to accept connections
+    depends_on:
+      - db
+
+    # Volume to add the liquibase collection of scripts
+    volumes:
+      - ./database/sql/liquibase/changeLog/:/db.changelog-master.xml
+    # Command to run the liquibase update service
+    command: --defaults-file=/liquibase/changelog/liquibase.properties update
+
+
+
+
+
+
+
